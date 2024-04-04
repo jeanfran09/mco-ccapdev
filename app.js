@@ -35,7 +35,7 @@ const mongoStore = require('connect-mongodb-session')(session);
 server.use(session({
     secret: 'secretMP',
     saveUninitialized: true, 
-    resave: false,
+    resave: true,
     store: new mongoStore({ 
       uri: uri,
       collection: 'sessionMP',
@@ -310,6 +310,11 @@ server.post('/read-user', function(req, resp){
                     //loggedUser = login_user;
                     req.session.login_user = login_user;
                     req.session.login_id = req.sessionID;
+                    console.log(req.body.rem);
+
+                    if(req.body.rem=="true"){
+                        req.session.cookie.expires = req.session.cookie.expires + 1000*60*60*504;
+                    }
 
                     if(req.session.login_user.isOwner == false){
                         //login = true;
