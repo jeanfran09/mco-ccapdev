@@ -25,8 +25,8 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://francesgo:reviewdb@estreview.ks8xuqa.mongodb.net/?retryWrites=true&w=majority&appName=estreview";
-//const uri = "mongodb://127.0.0.1:27017/estreviewdb";
+//const uri = "mongodb+srv://francesgo:reviewdb@estreview.ks8xuqa.mongodb.net/?retryWrites=true&w=majority&appName=estreview";
+const uri = "mongodb://127.0.0.1:27017/estreviewdb";
 mongoose.connect(uri);
 
 const session = require('express-session');
@@ -304,24 +304,29 @@ server.post('/read-user', function(req, resp){
     //in the login function. Access the information like a JSon array.
     userModel.findOne(searchQuery).then(function(login_user){
         console.log('Attempting log in');
-        bcrypt.compare(req.body.pass, login_user.password, function(err, result) {
-            if(login_user != undefined && login_user._id != null && result == true){
-                //loggedUser = login_user;
-                req.session.login_user = login_user;
-                req.session.login_id = req.sessionID;
+        if(login_user!=undefined){
+            bcrypt.compare(req.body.pass, login_user.password, function(err, result) {
+                if(login_user != undefined && login_user._id != null && result == true){
+                    //loggedUser = login_user;
+                    req.session.login_user = login_user;
+                    req.session.login_id = req.sessionID;
 
-                if(req.session.login_user.isOwner == false){
-                    //login = true;
-                    loadReviews(req.session.login_user);
-                    resp.redirect('/');
+                    if(req.session.login_user.isOwner == false){
+                        //login = true;
+                        loadReviews(req.session.login_user);
+                        resp.redirect('/');
+                    }else{
+                        resp.redirect('/owner/' + req.session.login_user.name);
+                    }
+                
                 }else{
-                    resp.redirect('/owner/' + req.session.login_user.name);
+                    resp.redirect('/log-in/failed');
                 }
-              
-            }else{
-                resp.redirect('/log-in/failed');
-            }
-        });
+            });
+        }else{
+            resp.redirect('/log-in/failed');
+        }
+        
         
     }).catch(errorFn);
 });
@@ -836,6 +841,48 @@ server.post('/update-profile', function(req, resp){
             
         }).catch(errorFn);
     }).catch(errorFn);
+});
+
+server.post('/delete-profile', function(req, resp){
+    const deleteQuery = { _id: req.body.id };
+
+    userModel.findOne(deleteQuery).then(function(user) {
+        userModel.deleteOne(deleteQuery).then(function(deluser) {
+            const delrevQuery = {'user.name':  user.name};
+            reviewModel.deleteMany(delrevQuery).then(function(delrev){
+                establishmentModel.find({}).then(function(est){
+                    for(let i=0;i<est.length;i++){
+                        calcRec(est[i]._id);
+                    }
+                    reviewModel.find({}).then(function(review){
+                        for(let i=0;i<review.length;i++){
+                            revQuery = {_id: review[i]._id}
+                            reviewModel.findOne(revQuery).then(function(rev){
+                                if(rev.helpfulBy.includes(user._id)){
+                                    rev.helpful--;
+                                    rev.helpfulBy.pop(user.id);
+                                }else if(rev.nothelpfulBy.includes(user._id)){
+                                    rev.notHelpful--;
+                                    rev.nothelpfulBy.pop(user.id);
+                                }
+                                rev.save().then(function (result) {
+                                    if(result){
+                                        console.log('reviews updated');
+                                    }else{
+                                        console.log('error in updating');
+                                    }
+                                }).catch(errorFn);
+                            }).catch(errorFn);
+                        }
+                        resp.redirect('/log-out');
+                    }).catch(errorFn);
+                }).catch(errorFn);
+            }).catch(errorFn);
+            
+            
+        }).catch(errorFn);
+    }).catch(errorFn);
+    
 });
 
 server.get('/profile/:username', function(req, resp){
