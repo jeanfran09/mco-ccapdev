@@ -461,7 +461,7 @@ server.get('/search', function(req, resp){
             const setRev = sortedRev.splice(0,5)
 
 
-            if(review_data.length>0 && filter == false){
+            if(sortedRev.length>0 && filter == false){
                 hasNext = true;
             }
 
