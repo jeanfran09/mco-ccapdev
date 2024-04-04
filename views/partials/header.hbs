@@ -50,6 +50,7 @@
                 {{/if}}
                 
             </ul>
+            {{#unless isOwner}}
             <form action="/search" class="d-flex">
                 <select name="search_param" id="search_param" class="btn btn-outline-light dropdown-toggle me-2" data-toggle="dropdown">
                     <option value="restaurant">Restaurant</option>
@@ -58,6 +59,7 @@
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search-input" required>
                 <button id="search" class="btn btn-outline-light" type="submit">Search</button>
             </form>
+            {{/unless}}
         </div>
     </div>
 </nav>
