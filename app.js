@@ -25,8 +25,8 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const mongoose = require('mongoose');
-//const uri = "mongodb+srv://francesgo:reviewdb@estreview.ks8xuqa.mongodb.net/?retryWrites=true&w=majority&appName=estreview";
-const uri = "mongodb://127.0.0.1:27017/estreviewdb";
+const uri = "mongodb+srv://francesgo:reviewdb@estreview.ks8xuqa.mongodb.net/?retryWrites=true&w=majority&appName=estreview";
+//const uri = "mongodb://127.0.0.1:27017/estreviewdb";
 mongoose.connect(uri);
 
 const session = require('express-session');
