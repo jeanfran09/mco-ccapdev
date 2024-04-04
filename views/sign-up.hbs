@@ -1,0 +1,157 @@
+{{> header}}
+<div class="col-12">
+    <div class="m-2">
+        <div class="loginbox">
+            <div class="signborder">
+                <div class="signtitletext">
+                    Sign Up
+                </div>
+                <form action="/create-user" method="post" enctype="multipart/form-data">
+                    <img class="img-responsive rounded-circle mx-auto d-block m-2 pfp-big" id="pfp" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="profile-photo">
+                    
+                    <div class="mb-3">
+                        <label for="formFileMultiple" class="signtext">Profile Picture</label>
+                        <input class="form-control" type="file" name="media" id="media" accept="image/*">
+                    </div>
+                    <!---<div class="avatarformatbox"><button id="uploadavatar" class="avatarcustombutton">Upload Image</button></div>--->
+                    <!-- <a href="#" class="btn btn-outline-light w-100 customavatarbutton" role="button">Upload Image</a> -->
+                    <!--Upload image does nothing for now commented version is button like log in-->
+
+                    <div class="signtext">
+                        Email:
+                    </div>
+                    <div class="input-group has-validation">
+                        <input class="form-control me-2 customboxinput w-100" type="email" placeholder="Email" aria-label="Email" name="email" id="email" required>
+                        <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                            Email has an account already.
+                        </div>
+                    </div>
+                    <div class="signtext">
+                        Username:
+                    </div>
+                    <div class="input-group has-validation">
+                        <input class="form-control me-2 customboxinput w-100" type="username" placeholder="Username" aria-label="Username" name="username" id="username" required>
+                        <div id="validuser" class="invalid-feedback">
+                            Username is already taken.
+                        </div>
+                    </div>
+                    <div class="signtext">
+                        Password: 
+                    </div>
+                    <div class="passwordbox">
+                        <div class="input-group has-validation">
+                            <input class="form-control me-2" style="height: 37px;" type="password" placeholder="Password" aria-label="Password" name="pass" id="pass" required>
+                            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                Minimum of 7 characters.
+                            </div>
+                        </div>
+                        <div class="input-group has-validation">
+                            <input class="form-control " type="password" style="height: 37px;" placeholder="Re-enter Password" aria-label="ConfirmPassword" name="confirmpass" id="confirmpass" required>
+                            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                Re-entered Password is not the same.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="signtext">
+                        Bio:
+                    </div>
+                    <textarea  type="bio" class="form-control" id="bio" rows="4" placeholder="Bio" name="bio"></textarea>
+
+                    <button id="sign-up" class="btn btn-success w-100 customloginbutton" type="submit">Sign Up</button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    media.onchange = evt => {
+        const [file] = media.files
+        if (file) {
+            pfp.src = URL.createObjectURL(file)
+        }
+    }
+
+    $('#confirmpass').on('input',function(e){
+        //alert('Changed!')
+        if(document.getElementById('confirmpass').value != document.getElementById('pass').value){
+            $('#confirmpass').addClass("is-invalid");
+        }else{
+            $('#confirmpass').removeClass("is-invalid");
+        }
+    });
+
+    $('#pass').on('input',function(e){
+        //alert('Changed!')
+        if(document.getElementById('pass').value.length<7){
+            $('#pass').addClass("is-invalid");
+        }else{
+            $('#pass').removeClass("is-invalid");
+        }
+        
+        if(document.getElementById('confirmpass').value != document.getElementById('pass').value && document.getElementById('confirmpass').value.length != 0){
+            $('#confirmpass').addClass("is-invalid");
+        }else{
+            $('#confirmpass').removeClass("is-invalid");
+        }
+    });
+
+    $('#sign-up').click(function() {
+        if(document.getElementById('confirmpass').classList.contains("is-invalid") || document.getElementById('username').classList.contains("is-invalid") || document.getElementById('email').classList.contains("is-invalid")) {
+            alert("Re-entered Password is not the same");
+            return false;
+        }
+    });
+
+    $('#username').on('input',function(e){
+        //alert('Changed!')
+        $.ajax({
+            type: 'POST', 
+            url: "/check-username", 
+            data: { user: $('#username').val()}, 
+            success: function(data,result){
+                //alert(data.exists);
+                if(String(data.exists)=="true"){
+                    $('#username').addClass("is-invalid");
+                    $('#validuser').text("Username is already taken.");
+                }else if($('#username').val().indexOf(' ') > -1 ){
+                    $('#username').addClass("is-invalid");
+                    $('#validuser').text("Username should not have spaces.");
+                }else{
+                    //alert("test".indexOf(' '));
+                    $('#username').removeClass("is-invalid");
+                }       
+            },error: function (jqXhr, textStatus, errorMessage){
+                alert(errorMessage);
+        }});
+    });
+
+    $('#username').on('keydown', function(e) {
+        if (e.which == 32){
+            //console.log('Space Detected');
+            $('#username').addClass("is-invalid");
+            $('#validuser').innerHTML("Username should not have spaces.");
+        }else{
+            $('#username').removeClass("is-invalid");
+        }
+    });
+
+    $('#email').on('input',function(e){
+        //alert('Changed!')
+        $.ajax({
+            type: 'POST', 
+            url: "/check-email", 
+            data: { email: $('#email').val()}, 
+            success: function(data,result){
+                //alert(data.exists);
+                if(String(data.exists)=="true"){
+                    $('#email').addClass("is-invalid");
+                }else{
+                    $('#email').removeClass("is-invalid");
+                }       
+            },error: function (jqXhr, textStatus, errorMessage){
+                alert(errorMessage);
+        }});
+    });
+</script>

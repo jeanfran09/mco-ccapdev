@@ -1,0 +1,204 @@
+.restosquare-small{
+    object-fit: cover;
+    width: 50px;
+    height: 50px;
+}
+
+.restosquare-big{
+    object-fit: cover;
+    max-width: 250px;
+    height: 250px;
+}
+
+.pfp-big{
+    object-fit: cover;
+    width: 225px;
+    height: 225px;
+}
+
+.pfp-small{
+    object-fit: cover;
+    width: 55px;
+    height: 55px;
+}
+
+.pfp-smaller{
+    object-fit: cover;
+    width: 35px;
+    height: 35px;
+    margin-left: -37px;
+    margin-bottom: -25px;
+    border: 2px solid white;
+}
+
+.review-photo{
+    object-fit: cover;
+    width: 125px;
+    height: 125px;
+}
+
+.text-underline-hover {
+    text-decoration: none;
+}
+
+.text-underline-hover:hover {
+    text-decoration: underline;
+}
+
+.navbarcustomcolor {
+    background-color: #087830;
+}
+
+.establishmentaddress {
+    font-size:23px; 
+    font-weight: 600;
+}
+
+.establishmentdesc {
+    text-align: justify; 
+    text-justify: inter-word;
+}
+
+.establishmentrating {
+    font-size:16px; 
+    font-weight: 500;
+}
+
+.loginbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginborder {
+    width: 40%;
+    height: 40%;
+    background-color: #087830;
+    border: 0px solid;
+    border-radius: 25px;
+    padding: 2%;
+    margin-top: 2%;
+}
+.logintitletext {
+    color: white;
+    text-align: center; 
+    text-justify: inter-word;
+    font-size:36px; 
+    font-weight: 600;
+}
+.logintext {
+    color: white;
+    text-align: justify; 
+    text-justify: inter-word;
+    font-size:19px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.abouttext {
+    color: white;
+    text-align: justify; 
+    text-justify: inter-word;
+    font-size:17px;
+    margin-top: 1.5%;
+    margin-bottom: 1.5%;
+}
+
+.aboutborder {
+    width: 40%;
+    height: 40%;
+    background-color: #087830;
+    border: 0px solid;
+    border-radius: 25px;
+    padding: 2%;
+    margin-top: 5%;
+}
+
+.signborder {
+    width: 40%;
+    height: 40%;
+    background-color: #ffffff;
+    border: 1px lightgray solid;
+    border-radius: 25px;
+    padding: 2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.signtitletext {
+    color: black;
+    text-align: center; 
+    text-justify: inter-word;
+    font-size:36px; 
+    font-weight: 600;
+}
+.signtext {
+    color: black;
+    text-align: justify; 
+    text-justify: inter-word;
+    font-size:19px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.customboxinput {
+    width: 85%;
+    margin-bottom: 2%;
+}
+
+.customloginbutton {
+    margin-top: 2%;
+    color: white;
+    border: 2px solid white;
+}
+
+
+.morecustombutton {
+    color:#087830; 
+    background: none; 
+    border: 0px; 
+    text-decoration: underline;
+}
+
+
+.customboxinput {
+    margin-bottom: 2%;
+}
+
+.customdescriptioninput{
+    margin-bottom: 2%;
+    height: 30%;
+}
+
+.customloginbutton {
+    margin-top: 6%;
+    color: white;
+    border: 2px solid white;
+}
+
+.passwordbox {
+    display: flex;
+    flex-direction: row;
+}
+
+.customavatarbutton {
+    margin-top: 2%;
+    color: white;
+    border: 2px solid white;
+}
+
+.avatarcustombutton {
+    color:white;
+    font-style: italic; 
+    background: none; 
+    border: 0px; 
+    text-decoration: underline;
+    margin-bottom: 2%;
+}
+
+.avatarformatbox {
+    display: flex;
+    justify-content: center;
+}
+

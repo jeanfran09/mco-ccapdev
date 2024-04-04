@@ -1,0 +1,140 @@
+{{> header}}
+<div class="container overflow-hidden">
+    <div class="row gx-5 justify-content-center pt-5">
+        <div class="col-3" style="min-width: 300px;">
+            {{#each user}}
+            <div class="p-3 border bg-white rounded mb-5">
+            
+                <img class="img-responsive rounded-circle mx-auto d-block m-2 pfp-big" src="{{profilePicture}}" id="pfp" alt="profile-photo"><br>
+                <p class="fw-bold fs-4" id="name" value="{{name}}">@{{name}}</p>
+                <p class="" id="shortdesc"> {{shortDescription}} </p>
+                
+                {{#if ../userprofile}}
+                <button class="btn btn-outline-secondary w-100" type="button" data-bs-toggle="modal" id="edit-user" data-bs-target="#edit-profile">Edit Profile</button>
+                {{/if}}
+            </div>
+            {{#if ../userprofile}}
+            <div class="modal fade" id="edit-profile" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form action="/update-profile" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3 text-center">
+                                    <img class="img-responsive rounded-circle mb-3 pfp-big" id="pfp" style="object-fit: cover; width: 125px; height: 125px;" src="{{profilePicture}}"><br>                                   
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formFileMultiple" class="form-label">Profile Picture</label>
+                                    <input class="form-control" name="media" id="media" value="{{profilePicture}}">
+                                </div>
+                                <div class="mb-3 has-validation">
+                                    <label class="form-label">Username</label>
+                                    <input type="username" class="form-control" id="username" name="username" value="{{name}}" required>
+                                    <div id="validuser" class="invalid-feedback">
+                                        Username is already taken.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Bio</label>
+                                    <textarea  type="bio" class="form-control" id="bio" name="bio" rows="4">{{shortDescription}}</textarea>
+                                </div>
+                                <input type="title" class="form-control" style="display: none;" value="{{_id}}" id="num" name="id">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" style="background-color: #087830;">Save changes</button>
+                            </div>
+                        </form>    
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+            {{/each}}
+        </div>
+        <div class="col-8">
+            <div class="m-2">
+                <p class="fw-bold fs-1">Reviews</p>
+                {{> review-list}}
+                <div class="container-fluid  p-0" >
+
+                    {{#each user}}
+                    {{#if ../hasPrev}}
+                    <a type="button" class="btn btn-success mb-5" href="/profile/{{name}}{{../prevNum}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                        <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                        </svg>
+                        Previous
+                    </a>
+                    {{/if}}
+                    {{#if ../hasNext}}
+                    
+                    <a type="button" class="btn btn-success float-end mb-5" href="/profile/{{name}}/{{../nextNum}}">
+                        Next
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                        </svg>
+                    </a>
+                    
+                    {{/if}}
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#username').on('input',function(e){
+        //alert('Changed!')
+        $.ajax({
+            type: 'POST', 
+            url: "/check-username", 
+            data: { user: $('#username').val()}, 
+            success: function(data,result){
+                
+                if(String(data.exists)=="true" && $('#username').val() != $('#name').text().removeCharAt(0)){
+                    $('#username').addClass("is-invalid");
+                    $('#validuser').text("Username is already taken.");
+                }else if($('#username').val().indexOf(' ') > -1 ){
+                    $('#username').addClass("is-invalid");
+                    $('#validuser').text("Username should not have spaces.");
+                }else{
+                    //alert("test".indexOf(' '));
+                    $('#username').removeClass("is-invalid");
+                }       
+            },error: function (jqXhr, textStatus, errorMessage){
+                alert(errorMessage);
+        }});
+    });
+
+    $('#username').on('keydown', function(e) {
+        if (e.which == 32){
+            //console.log('Space Detected');
+            $('#username').addClass("is-invalid");
+            $('#validuser').innerHTML("Username should not have spaces.");
+        }else{
+            $('#username').removeClass("is-invalid");
+        }
+    });
+
+    //$(document).ready(function(){
+        
+        /*$('#edit-user').click(function(){
+            //document.getElementById("media").value = document.getElementById("pfp").getAttribute('src');
+            //document.getElementById("username").value = document.getElementById("name").innerHTML;
+            //document.getElementById("bio").value = document.getElementById("shortdesc").innerHTML;
+            alert("test");
+        });*/
+    //});
+
+    /*media.onchange = evt => {
+        const [file] = media.files
+        if (file) {
+            pfp.src = URL.createObjectURL(file)
+        }
+    }*/
+
+    
+</script>

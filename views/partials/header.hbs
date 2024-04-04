@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg navbar-light navbarcustomcolor">
+    <div class="container-fluid">
+        {{#if isOwner}}
+        <a class="navbar-brand text-white" href="/owner/{{loggedUser}}">
+            
+        {{else}}
+        <a class="navbar-brand text-white" href="/">
+            
+        {{/if}}
+            <img src="/source/logo.png" width="50" height="50">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {{#if isOwner}}
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/owner/{{loggedUser}}">Home</a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/">Home</a>
+                </li>
+                {{/if}}
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/about">About</a>
+                </li>
+                {{#if login}}
+                <!---<li class="nav-item">
+                    <a class="nav-link active text-white" href="/write-review">Write a Review</a>
+                </li>--->
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/profile/{{loggedUser}}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/log-out">Log Out</a>
+                </li>
+                {{else if isOwner}}
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/log-out">Log Out</a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/sign-up">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active text-white" href="/log-in">Log In</a>
+                </li>
+                {{/if}}
+                
+            </ul>
+            <form action="/search" class="d-flex">
+                <select name="search_param" id="search_param" class="btn btn-outline-light dropdown-toggle me-2" data-toggle="dropdown">
+                    <option value="restaurant">Restaurant</option>
+                    <option value="review">Review</option>
+                </select>
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search-input" required>
+                <button id="search" class="btn btn-outline-light" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</nav>

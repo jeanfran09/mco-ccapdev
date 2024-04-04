@@ -1,0 +1,25 @@
+{{> header}}
+<div class="container overflow-hidden">
+    <div class="row gx-5 justify-content-center pt-5">
+        <div class="col-3" style="min-width: 300px;">
+            <div class="p-3 border bg-white rounded">
+                {{#if login}}
+                <img class="img-responsive rounded-circle mx-auto d-block m-2 pfp-big" src="{{loggedPhoto}}" alt="profile-photo"><br>
+                <p class="fw-bold fs-4">@{{loggedUser}}</p>
+                <a href="/profile/{{loggedUser}}" class="btn btn-outline-secondary w-100" role="button">Go to Profile</a>
+
+                {{else}}
+                <a href="/sign-up" class="btn btn-outline-secondary w-100" role="button">Sign Up</a>
+                    &nbsp
+                <a href="/log-in" class="btn btn-outline-secondary w-100" role="button">Log In</a>
+                {{/if}}
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="m-2">
+                <p class="fw-bold fs-1">Recommended Restaurants</p>
+                {{> establishment-list}}
+            </div>
+        </div>
+    </div>
+</div>

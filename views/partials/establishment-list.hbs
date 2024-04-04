@@ -1,0 +1,15 @@
+{{#each establishment-data}}
+<div class="border bg-white rounded mb-3">
+    <div class="d-flex m-3 justify-content-start align-items-center w-100">
+        <img class="img-responsive restosquare-small me-2 rounded-2" src="{{estPhoto}}" alt="resto-pfp">
+        <a class="fw-bold fs-4 text-dark text-underline-hover" href="/restaurant/{{name}}">{{name}}</a>
+    </div>
+    <div class="ms-3 me-3 mb-3">
+        <div class="mb-1 establishmentaddress">{{location}}</div>
+        <div class="mb-1 establishmentrating text-muted">{{recommendedPercent}}% Recommend this place</div>
+        <div id="review{{estNum}}" class="establishmentdesc">{{description}}</div>
+        <button id="more{{estNum}}" class="morecustombutton">...more</button>
+    </div>
+</div>
+{{/each}}
+

@@ -1,0 +1,90 @@
+{{> header}}
+<div class="container overflow-hidden">
+    <div class="row gx-5 justify-content-center pt-5">
+        <div class="col-8">
+            <div class="m-2">
+                <p class="fw-bold fs-1">Writing a review for {{establishment.name}}</p>
+                <div class="border bg-white rounded p-4" >
+                    <form action="/submit-review" method="post" enctype="multipart/form-data">
+                        <!---<div class="mb-3 ">
+                            <label class="form-label" style="font-weight: 600;">Restaurant</label><br>
+                            <select id="select_box" class="form-select" name="restaurant" data-live-search="true" required>
+                                <option value="" selected hidden disabled>Choose restaurant</option>
+                                {{#each establishment}}
+                                <option value="{{name}}" name="{{name}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                            <a id="view-est" class="btn btn-success w-100 mt-2" style="display: none;" type="button" target="_blank">View Restaurant</a>
+                        </div>--->
+                        <div class="mb-3 form-group">
+                            <label class="form-label" style="font-weight: 600;">Rating</label><br>
+                            <input type="checkbox" class="form-check-input" id="recommend" name="rec" value="true">
+                            <label class="form-check-label me-3" >Recommend</label>
+                            <input type="checkbox" class="form-check-input" id="not-recommend" name="rec" value="false">
+                            <label class="form-check-label" >Do Not Recommend</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" style="font-weight: 600;">Title</label>
+                            <input type="title" class="form-control" id="title" required name="title">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" style="font-weight: 600;">Review</label>
+                            <textarea  type="review" class="form-control" id="review" rows="4" required name="review"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formFileMultiple" class="form-label" style="font-weight: 600;">Upload Media</label>
+                            <input class="form-control" type="file" name="media"  multiple accept="image/*,video/*">
+                        </div>
+                        <input type="title" class="form-control" style="display: none;" value="{{establishment._id}}" id="num" name="restaurant">
+                        <button id="post-review" class="btn btn-success" type="submit">Post Review</button>  
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    /*var select_box_element = document.querySelector("#select_box");
+
+    dselect(select_box_element, {
+        search: true
+    });*/
+
+    $('.form-check-input').click(function() {
+        $('.form-check-input').not(this).prop('checked', false);
+    });
+
+    $('#post-review').click(function() {
+        checked = $("input[type=checkbox]:checked").length;
+
+        if(!checked) {
+            alert("Rating is required");
+            return false;
+        }
+
+        var $fileUpload = $("input[type='file']");
+        if (parseInt($fileUpload.get(0).files.length)>6){
+         alert("You can only upload a maximum of 6 files");
+         return false;
+        }
+
+        const isWhitespaceString = str => !/\S/.test(str);
+        var title = $('#title').val();
+        var body = $('#review').val();
+        if(isWhitespaceString(title)){
+            alert("Title is empty");
+            return false;
+        }else if(isWhitespaceString(body)){
+            alert("Review is empty");
+            return false;
+        }
+    });
+
+    
+    /*$("#select_box").on('change',function(){
+        document.getElementById("view-est").style.display = 'block';
+        document.getElementById("view-est").href = "/restaurant/" + document.getElementById("select_box").options[this.selectedIndex].text;
+    });*/
+ 
+</script>
