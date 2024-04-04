@@ -231,9 +231,15 @@ server.get('/', function(req, resp){
     const searchQuery = {};
     var name;
     var pfp;
+    var isOwner;
     if(req.session.login_user!=undefined){
         name = req.session.login_user.name;
         pfp = req.session.login_user.profilePicture;
+        isOwner = req.session.login_user.isOwner;
+    }
+
+    if(isOwner){
+        resp.redirect("/owner/" + name);
     }
 
     establishmentModel.find(searchQuery).lean().then(function(establishment_data){
