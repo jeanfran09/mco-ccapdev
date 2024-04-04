@@ -240,23 +240,25 @@ server.get('/', function(req, resp){
 
     if(isOwner){
         resp.redirect("/owner/" + name);
+    }else{
+        establishmentModel.find(searchQuery).lean().then(function(establishment_data){
+            for(let i=0;i<establishment_data.length;i++){
+                establishment_data[i].estNum = i+1;
+            }
+            const data = quickSort(establishment_data);
+            console.log(data);
+            resp.render('home',{
+                layout: 'index',
+                title: 'Home',
+                'establishment-data': data,
+                login: req.session.login_user != undefined,
+                loggedUser: name,
+                loggedPhoto: pfp
+            });
+        }).catch(errorFn);
     }
 
-    establishmentModel.find(searchQuery).lean().then(function(establishment_data){
-        for(let i=0;i<establishment_data.length;i++){
-            establishment_data[i].estNum = i+1;
-        }
-        const data = quickSort(establishment_data);
-        console.log(data);
-        resp.render('home',{
-            layout: 'index',
-            title: 'Home',
-            'establishment-data': data,
-            login: req.session.login_user != undefined,
-            loggedUser: name,
-            loggedPhoto: pfp
-        });
-    }).catch(errorFn);
+    
     
 });
 
